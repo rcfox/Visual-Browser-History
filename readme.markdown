@@ -4,6 +4,7 @@ Visual Browser History
 <a href="http://i.imgur.com/n6eBR.png"><img src="http://i.imgur.com/n6eBRl.jpg"></a>
 
 To use:
+
 1. Click the Downloads button at the top of the page.
 2. Click the "history.crx" link.
 3. Click "Continue".
