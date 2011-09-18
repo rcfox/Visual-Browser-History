@@ -1,0 +1,46 @@
+<style>
+	body { margin: 0; }
+</style>
+
+<script src="jquery.min.js"></script> 
+<script src="springy.js"></script> 
+<script src="springyui.js"></script> 
+<script>
+
+var graph = new Graph();
+ 
+jQuery(document).ready(function(){
+	jQuery("#springyGraph").springy({ "graph": graph });
+});
+
+var nodes = {};
+var history = chrome.extension.getBackgroundPage().history;
+for(h in history) {
+	if(!nodes[h]) {
+		nodes[h] = graph.newNode({label: h});
+	} 
+	for(var i = 0; i < history[h].length; ++i)
+	{
+		var to = history[h][i].url;
+		if(!nodes[to]) {
+			nodes[to] = graph.newNode({label: to});
+		}
+		graph.newEdge(nodes[h],nodes[to],{color: "#000000"});
+	}
+}
+
+function resize() {
+	var canvas = document.getElementById("springyGraph");
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+}
+
+</script>
+
+
+<body onresize="resize();" onload="resize();"> 
+
+<canvas id="springyGraph" width="640" height="480"/>
+
+</body> 
+</html> 

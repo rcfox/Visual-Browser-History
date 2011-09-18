@@ -1,0 +1,13 @@
+{
+	"name": "Visual Browser History",
+	"version": "1.0",
+	"description": "Visualize your journey through the web.",
+	"browser_action": {
+		"default_icon": "icon.png"
+	},
+	"background_page": "background.html",
+	"permissions": [
+		"tabs",
+		"history"
+	]
+}

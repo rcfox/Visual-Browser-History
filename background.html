@@ -1,0 +1,36 @@
+<html>
+  <script>
+
+var currentUrl = "";
+
+function updateCurrentUrl(tabId,selectInfo) {
+	chrome.tabs.getSelected(null,function(tab) {
+		currentUrl = tab.url;
+	});
+}
+
+var history = {};
+
+chrome.browserAction.onClicked.addListener(function(tab) {
+	chrome.tabs.create({url: chrome.extension.getURL("popup.html")}, function(tab) {});
+});
+
+chrome.tabs.onSelectionChanged.addListener(updateCurrentUrl);
+
+chrome.history.onVisited.addListener(function(result) {
+	chrome.history.getVisits({url: result.url}, function(visits) {
+		var v = visits[visits.length-1];
+		if(v.transition != "reload") {
+			if(!(/^chrome/).test(result.url)) {
+				if(!history[currentUrl]) {
+					history[currentUrl] = new Array();
+				}
+				history[currentUrl].push(result);
+			}
+		}
+		updateCurrentUrl();
+	});
+});
+
+  </script>
+</html>
