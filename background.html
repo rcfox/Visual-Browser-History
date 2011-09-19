@@ -2,14 +2,39 @@
   <script>
 
 var currentUrl = "";
+var incognito = false;
 
 function updateCurrentUrl(tabId,selectInfo) {
 	chrome.tabs.getSelected(null,function(tab) {
 		currentUrl = tab.url;
+		incognito = tab.incognito;
 	});
 }
 
 var history = {};
+function saveHistoryData(url, data) {
+	if(incognito) {
+		if(!history[url]) {
+			history[url] = new Array();
+		}
+		history[url].push(data);
+	} else {
+		if(!localStorage[url]) {
+			localStorage[url] = JSON.stringify(new Array());
+		}
+		var temp = JSON.parse(localStorage[url]);
+		temp.push(data);
+		localStorage[url] = JSON.stringify(temp);
+	}
+}
+
+function getHistoryData() {
+	if(incognito) {
+		return history;
+	} else {
+		return localStorage;
+	}
+}
 
 chrome.browserAction.onClicked.addListener(function(tab) {
 	chrome.tabs.create({url: chrome.extension.getURL("popup.html")}, function(tab) {});
@@ -22,10 +47,7 @@ chrome.history.onVisited.addListener(function(result) {
 		var v = visits[visits.length-1];
 		if(v.transition != "reload") {
 			if(!(/^chrome/).test(result.url)) {
-				if(!history[currentUrl]) {
-					history[currentUrl] = new Array();
-				}
-				history[currentUrl].push(result);
+				saveHistoryData(currentUrl,result);
 			}
 		}
 		updateCurrentUrl();

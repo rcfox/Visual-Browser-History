@@ -14,14 +14,15 @@ jQuery(document).ready(function(){
 });
 
 var nodes = {};
-var history = chrome.extension.getBackgroundPage().history;
+var history = chrome.extension.getBackgroundPage().getHistoryData();
 for(h in history) {
+	var item = JSON.parse(history[h]);
 	if(!nodes[h]) {
 		nodes[h] = graph.newNode({label: h});
 	} 
-	for(var i = 0; i < history[h].length; ++i)
+	for(var i = 0; i < item.length; ++i)
 	{
-		var to = history[h][i].url;
+		var to = item[i].url;
 		if(!nodes[to]) {
 			nodes[to] = graph.newNode({label: to});
 		}
@@ -32,7 +33,11 @@ for(h in history) {
 function resize() {
 	var canvas = document.getElementById("springyGraph");
 	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
+	canvas.height = window.innerHeight - document.getElementById("clear").offsetHeight*2;
+}
+
+function clearHistory() {
+	localStorage.clear();
 }
 
 </script>
@@ -40,6 +45,7 @@ function resize() {
 
 <body onresize="resize();" onload="resize();"> 
 
+<a id="clear" href="" onclick="clearHistory();">Clear History Data</a>
 <canvas id="springyGraph" width="640" height="480"/>
 
 </body> 

@@ -13,4 +13,4 @@ To use:
 4. Browse!
 5. Click the "Visual Browser History" icon to visualize your history.
 
-Note: This is a very limited demo at the moment. All "Visual Browser History" history data is lost if Chrome is closed, or the extension is reloaded.
+Note: This is a very limited demo at the moment.
