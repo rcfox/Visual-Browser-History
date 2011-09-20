@@ -30,10 +30,11 @@ jQuery.fn.springy = function(params) {
 	if(!graph){
 			return;
 	}
-
-	var stiffness = params.stiffness || 400.0;
-	var repulsion = params.repulsion || 400.0;
-	var damping = params.damping || 0.5;
+	
+	var MAX_TEXT_LENGTH = 40;
+	var stiffness = params.stiffness || 200.0;
+	var repulsion = params.repulsion || 1500.0;
+	var damping = params.damping || 0.8;
 
 	var canvas = this[0];
 	var ctx = canvas.getContext("2d");
@@ -122,6 +123,11 @@ jQuery.fn.springy = function(params) {
 
 	Node.prototype.getWidth = function() {
 		var text = typeof(this.data.label) !== 'undefined' ? this.data.label : this.id;
+		if (!(nearest !== null && nearest.node !== null && nearest.node.id === this.id)) {
+			if(text.length > MAX_TEXT_LENGTH) {
+				text = text.substring(0,MAX_TEXT_LENGTH) + "...";
+			}
+		}
 		if (this._width && this._width[text])
 			return this._width[text];
 
@@ -250,11 +256,11 @@ jQuery.fn.springy = function(params) {
 			// fill background
 			if (selected !== null && nearest.node !== null && selected.node.id === node.id)
 			{
-				ctx.fillStyle = "#FFFFE0";
+				ctx.fillStyle = "#4FFFE0";
 			}
 			else if (nearest !== null && nearest.node !== null && nearest.node.id === node.id)
 			{
-				ctx.fillStyle = "#EEEEEE";
+				ctx.fillStyle = "#EEEE40";
 			}
 			else
 			{
@@ -269,6 +275,11 @@ jQuery.fn.springy = function(params) {
 			ctx.fillStyle = "#000000";
 			ctx.font = "16px Verdana, sans-serif";
 			var text = typeof(node.data.label) !== 'undefined' ? node.data.label : node.id;
+			if (!(nearest !== null && nearest.node !== null && nearest.node.id === node.id)) {
+				if(text.length > MAX_TEXT_LENGTH) {
+					text = text.substring(0,MAX_TEXT_LENGTH) + "...";
+				}
+			}
 			ctx.fillText(text, s.x - boxWidth/2 + 5, s.y - 8);
 
 			ctx.restore();
