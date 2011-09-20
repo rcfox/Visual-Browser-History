@@ -46,7 +46,7 @@ chrome.history.onVisited.addListener(function(result) {
 	chrome.history.getVisits({url: result.url}, function(visits) {
 		var v = visits[visits.length-1];
 		if(v.transition != "reload") {
-			if(!(/^chrome/).test(result.url)) {
+			if(!(/^chrome/).test(currentUrl) && !(/^chrome/).test(result.url)) {
 				saveHistoryData(currentUrl,result);
 			}
 		}
